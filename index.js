@@ -209,6 +209,23 @@ async function run() {
         const result = await usersCollection.find(query).toArray();
         res.send(result);
       });
+
+      //-------------------------------------------------------//
+
+      //signup work
+
+      app.get("/users", async (req, res) => {
+        const email = req.query.email;
+        const query = { email: email };
+        const result = await usersCollection.findOne(query);
+        res.send(result);
+      });
+
+      app.post("/users", async (req, res) => {
+        const user = req.body;
+        const result = await usersCollection.insertOne(user);
+        res.send(result);
+      });
     });
   } finally {
   }
