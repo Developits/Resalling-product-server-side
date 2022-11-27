@@ -184,6 +184,31 @@ async function run() {
         const result = await productsCollection.insertOne(product);
         res.send(result);
       });
+
+      //------------------------------------------------------//
+
+      // sellerData needed
+
+      app.get("/sellerdata", async (req, res) => {
+        const name = req.query.name;
+        const query = { name: name };
+        const result = await usersCollection.findOne(query);
+        res.send(result);
+      });
+
+      app.get("/allsellers", async (req, res) => {
+        const type = "seller";
+        const query = { accountType: type };
+        const result = await usersCollection.find(query).toArray();
+        res.send(result);
+      });
+
+      app.get("/allbuyers", async (req, res) => {
+        const type = "buyer";
+        const query = { accountType: type };
+        const result = await usersCollection.find(query).toArray();
+        res.send(result);
+      });
     });
   } finally {
   }
