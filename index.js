@@ -45,6 +45,38 @@ async function run() {
     });
 
     //-------------------------------------------------------//
+
+    // available products api
+    app.get("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const status = "available";
+      const query = { categoryid: id, status: status };
+      const result = await productsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // booked product api
+    app.put("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const product = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: "booked",
+          buyername: product.buyername,
+          buyeremail: product.buyeremail,
+          phone: product.phone,
+          meetinglocation: product.location,
+        },
+      };
+      const result = await productsCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
   } finally {
   }
 }
