@@ -133,6 +133,22 @@ async function run() {
       );
 
       res.send(result);
+
+      // My products api
+      app.get("/products", async (req, res) => {
+        const user = req.query.user;
+        const query = { sellername: user };
+        const result = await productsCollection.find(query).toArray();
+        res.send(result);
+      });
+
+      // delete product api
+      app.delete("/products/:id", async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const result = await productsCollection.deleteOne(filter);
+        res.send(result);
+      });
     });
   } finally {
   }
