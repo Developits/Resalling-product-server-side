@@ -21,6 +21,35 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
+async function run() {
+  try {
+    const categoryCollection = client.db("salvageYard").collection("category");
+    const productsCollection = client.db("salvageYard").collection("products");
+    const usersCollection = client.db("salvageYard").collection("users");
+    const reviewsCollection = client.db("salvageYard").collection("reviews");
+    const paymentsCollection = client.db("salvageYard").collection("payments");
+
+    //-------------------------------------------------------//
+
+    //calling category
+    app.get("/category", async (req, res) => {
+      const query = {};
+      const result = await categoryCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.get("/advertiseproduct", async (req, res) => {
+      const query = { advertise: true, status: "available" };
+      const result = await productsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    //-------------------------------------------------------//
+  } finally {
+  }
+}
+run().catch(console.log);
+
 app.get("/", async (req, res) => {
   res.send("Salvage Yard server is running");
 });
