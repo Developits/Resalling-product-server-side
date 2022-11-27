@@ -168,6 +168,22 @@ async function run() {
         );
         res.send(result);
       });
+
+      // booked my buyer api
+
+      app.get("/bookedbuyer", async (req, res) => {
+        const user = req.query.user;
+        const query = { sellername: user, status: "booked", status: "paid" };
+        const result = await productsCollection.find(query).toArray();
+        res.send(result);
+      });
+
+      //add products api
+      app.post("/products", async (req, res) => {
+        const product = req.body;
+        const result = await productsCollection.insertOne(product);
+        res.send(result);
+      });
     });
   } finally {
   }
