@@ -133,99 +133,136 @@ async function run() {
       );
 
       res.send(result);
+    });
 
-      // My products api
-      app.get("/products", async (req, res) => {
-        const user = req.query.user;
-        const query = { sellername: user };
-        const result = await productsCollection.find(query).toArray();
-        res.send(result);
-      });
+    // My products api
+    app.get("/products", async (req, res) => {
+      const user = req.query.user;
+      const query = { sellername: user };
+      const result = await productsCollection.find(query).toArray();
+      res.send(result);
+    });
 
-      // delete product api
-      app.delete("/products/:id", async (req, res) => {
-        const id = req.params.id;
-        const filter = { _id: ObjectId(id) };
-        const result = await productsCollection.deleteOne(filter);
-        res.send(result);
-      });
+    // delete product api
+    app.delete("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await productsCollection.deleteOne(filter);
+      res.send(result);
+    });
 
-      //Show Advertise api
+    //Show Advertise api
 
-      app.put("/productsadvertise/:id", async (req, res) => {
-        const id = req.params.id;
-        const filter = { _id: ObjectId(id) };
-        const options = { upsert: true };
-        const updateDoc = {
-          $set: {
-            advertise: true,
-          },
-        };
-        const result = await productsCollection.updateOne(
-          filter,
-          updateDoc,
-          options
-        );
-        res.send(result);
-      });
+    app.put("/productsadvertise/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          advertise: true,
+        },
+      };
+      const result = await productsCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
 
-      // booked my buyer api
+    // booked my buyer api
 
-      app.get("/bookedbuyer", async (req, res) => {
-        const user = req.query.user;
-        const query = { sellername: user, status: "booked", status: "paid" };
-        const result = await productsCollection.find(query).toArray();
-        res.send(result);
-      });
+    app.get("/bookedbuyer", async (req, res) => {
+      const user = req.query.user;
+      const query = { sellername: user, status: "booked", status: "paid" };
+      const result = await productsCollection.find(query).toArray();
+      res.send(result);
+    });
 
-      //add products api
-      app.post("/products", async (req, res) => {
-        const product = req.body;
-        const result = await productsCollection.insertOne(product);
-        res.send(result);
-      });
+    //add products api
+    app.post("/products", async (req, res) => {
+      const product = req.body;
+      const result = await productsCollection.insertOne(product);
+      res.send(result);
+    });
 
-      //------------------------------------------------------//
+    //------------------------------------------------------//
 
-      // sellerData needed
+    // sellerData needed
 
-      app.get("/sellerdata", async (req, res) => {
-        const name = req.query.name;
-        const query = { name: name };
-        const result = await usersCollection.findOne(query);
-        res.send(result);
-      });
+    app.get("/sellerdata", async (req, res) => {
+      const name = req.query.name;
+      const query = { name: name };
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    });
 
-      app.get("/allsellers", async (req, res) => {
-        const type = "seller";
-        const query = { accountType: type };
-        const result = await usersCollection.find(query).toArray();
-        res.send(result);
-      });
+    app.get("/allsellers", async (req, res) => {
+      const type = "seller";
+      const query = { accountType: type };
+      const result = await usersCollection.find(query).toArray();
+      res.send(result);
+    });
 
-      app.get("/allbuyers", async (req, res) => {
-        const type = "buyer";
-        const query = { accountType: type };
-        const result = await usersCollection.find(query).toArray();
-        res.send(result);
-      });
+    app.get("/allbuyers", async (req, res) => {
+      const type = "buyer";
+      const query = { accountType: type };
+      const result = await usersCollection.find(query).toArray();
+      res.send(result);
+    });
 
-      //-------------------------------------------------------//
+    //-------------------------------------------------------//
 
-      //signup work
+    //signup work
 
-      app.get("/users", async (req, res) => {
-        const email = req.query.email;
-        const query = { email: email };
-        const result = await usersCollection.findOne(query);
-        res.send(result);
-      });
+    app.get("/users", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    });
 
-      app.post("/users", async (req, res) => {
-        const user = req.body;
-        const result = await usersCollection.insertOne(user);
-        res.send(result);
-      });
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
+    //-------------------------------------------------------//
+
+    //delete user
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await usersCollection.deleteOne(filter);
+      res.send(result);
+    });
+
+    // verify product
+    app.put("/verifyseller/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          verified: true,
+        },
+      };
+      const result = await usersCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
+
+    //--------------------------------------------------------//
+
+    // Calling reviews
+
+    app.get("/reviews", async (req, res) => {
+      const query = {};
+      const result = await reviewsCollection.find(query).toArray();
+      res.send(result);
     });
   } finally {
   }
