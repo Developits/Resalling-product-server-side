@@ -222,11 +222,34 @@ async function run() {
       res.send(result);
     });
 
-    app.post("/users", async (req, res) => {
-      const user = req.body;
-      const result = await usersCollection.insertOne(user);
+    // create new user
+
+    app.put("/addusers", async (req, res) => {
+      const userInfo = req.body;
+      const email = userInfo?.email;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          name: userInfo.name,
+          email: userInfo?.email,
+          accountType: userInfo.accountType,
+          verified: false,
+        },
+      };
+      const result = await usersCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
       res.send(result);
     });
+
+    // app.post("/users", async (req, res) => {
+    //   const user = req.body;
+    //   const result = await usersCollection.insertOne(user);
+    //   res.send(result);
+    // });
     //-------------------------------------------------------//
 
     //delete user
