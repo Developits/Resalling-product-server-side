@@ -100,6 +100,33 @@ async function run() {
       res.send(result);
     });
 
+    // report product
+
+    app.put("/reportproduct/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          reported: true,
+        },
+      };
+      const result = await productsCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
+
+    //Get reported product
+
+    app.get("/reportedproduct", async (req, res) => {
+      const query = { reported: true };
+      const result = await productsCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // Booked my order api
 
     app.get("/myorders", async (req, res) => {
